@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Home = () => {
   return (
     <div className="home bg-white">
@@ -13,13 +15,21 @@ const Home = () => {
               and more. Immerse yourself in the vibrant world of anime with our<br />
               carefully curated selection of high-quality collectibles.
             </p>
+            <div className="pt-4">
+              <Link
+                to="/products"
+                className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                Shop Now
+              </Link>
+            </div>
           </div>
 
           {/* Hero Image */}
           <div className="relative z-10 flex justify-center md:justify-end">
-            <img 
-              src="/.legacy/image/pic_front.png" 
-              alt="AniVerse Hero" 
+            <img
+              src="/.legacy/image/pic_front.png"
+              alt="AniVerse Hero"
               className="max-w-full h-auto max-h-[500px] object-contain"
             />
           </div>
