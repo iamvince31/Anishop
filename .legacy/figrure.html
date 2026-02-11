@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniVerse Collectibles</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar {
+      background-color: #4c3297;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .navbar .navbar-brand img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .navbar .nav-link {
+      color: #ff6f61;
+      font-family: "Inter-Black", sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+      margin-left: 20px;
+    }
+
+    .navbar .nav-link:hover {
+      color: #ffffff;
+    }
+
+    .navbar .nav-link.active {
+      color: #ffffff;
+    }
+
+    .navbar .nav-link.active:hover {
+      color: #ff6f61;
+    }
+
+    .navbar-toggler {
+      border-color: #ff6f61;
+    }
+
+    .navbar-toggler:hover {
+      box-shadow: none;
+    }
+
+    .navbar-toggler-icon {
+      color: #ff6f61;
+      font-size: 1.5rem;
+      font-family: "Inter-Black", sans-serif;
+    }
+
+    .btn-secondary {
+      background-color: #4c3297;
+      color: #ffffff;
+      border: none;
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      font-family: "Inter-Black", sans-serif;
+      box-shadow: 0 0 5px 2px rgba(255, 111, 97, 0.8);
+      /* Shadow for non-responsive */
+    }
+
+    .btn-secondary:hover {
+      background-color: #ff6f61;
+    }
+
+    .ellipse-1 {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .footer {
+      background-color: #4c3297;
+      color: #ffffff;
+      padding: 30px 0;
+      margin-top: 50px;
+    }
+
+    .footer a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer .social-icons img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    .form-control {
+      font-size: 1.1rem;
+      padding: 10px;
+    }
+
+    /* Ensure consistent card size and image fitting */
+    .product-card {
+      background-color: #4c3297;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      /* Optional: Add shadow for a subtle effect */
+    }
+
+    .product-card img {
+      max-height: 200px;
+      object-fit: contain;
+      /* Ensure images are contained within the card without distortion */
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .product-card h2,
+    .product-card h3 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .product-card p.lead {
+      color: #fff;
+      margin-bottom: auto;
+    }
+
+    .product-card button {
+      margin: 5px 0;
+    }
+
+    .cart-button {
+      font-size: 1.5rem;
+      color: #fff;
+      background-color: #270f0f;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+    }
+
+    .cart-button:hover {
+      background-color: #a00000;
+    }
+
+    @media (max-width: 767px) {
+      .navbar .navbar-brand img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .navbar .nav-link {
+        font-size: 1rem;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+
+      .btn-secondary {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        box-shadow: none;
+        /* Remove shadow for responsive */
+      }
+
+      .form-control {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .product-card {
+        flex: 1 1 calc(50% - 1rem);
+        /* Make cards stack in two columns on small screens */
+        margin: 0.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .product-card {
+        flex: 1 1 calc(33.333% - 1rem);
+        /* Three columns layout for larger screens */
+        margin: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="shop.html">
+        <img class="ellipse-1" src="image/logo.png" alt="Logo" />
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarColor01">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="shop.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="products.html">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- Product Grid -->
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Figurines</h2>
+    <div class="row" id="productGrid">
+      <!-- Original Six Product Cards -->
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="Ai Hoshino Figure" data-image="ai.png" data-price="$99.99">
+          <img src="image/ai.png" alt="Ai Hoshino Figure">
+          <h2>Ai Hoshino Figure</h2>
+          <h3>$199.99</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="marin" data-image="image/marin.png" data-price="$10.00">
+          <img src="image/marin.png" alt="marin">
+          <h2>Marin Kitagawa Figure</h2>
+          <h3>$229.00</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="Zero" data-image="zero.png" data-price="$130.00">
+          <img src="image/zero.png" alt="Zero">
+          <h2>Zero Two Figure</h2>
+          <h3>$188.80</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="dabi" data-image="image/dabi.png" data-price="$30.00">
+          <img src="image/dabi.png" alt="dabi">
+          <h2>Toya Todoroki (dabi) Figure</h2>
+          <h3>$210.00</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="megumi" data-image="image/megumi.png" data-price="$3.00">
+          <img src="image/megumi.png" alt="megumi">
+          <h2>Megumi Fushiguro Figure</h2>
+          <h3>$290.00</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex">
+        <div class="product-card" data-name="Geto" data-image="image/geto.png" data-price="$40.00">
+          <img src="image/geto.png" alt="Kurama">
+          <h2>Geto Suguru Figure</h2>
+          <h3>$150.00</h3>
+          <button class="btn btn-primary buy-now">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <p>Email: <a href="mailto:support@animefigshaven.com">support@animefigshaven.com</a></p>
+
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <a href="shop.html">Home</a><br>
+          <a href="products.html">Products</a><br>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61563752905603"><img src="image/facebook.jfif"
+                alt="Facebook"></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <p>&copy; 2024 AnimeFigs Haven. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      const productGrid = document.getElementById('productGrid');
+
+      // Function to render products
+      function renderProducts(products) {
+        if (products.length === 0) {
+          productGrid.innerHTML = '<div class="col-12 text-center text-white"><p>No products found in this category.</p></div>';
+          return;
+        }
+
+        productGrid.innerHTML = products.map(product => `
+          <div class="col-md-4 d-flex">
+            <div class="product-card" data-name="${product.name}" data-image="${product.image_url}" data-price="${product.price}">
+              <img src="${product.image_url}" alt="${product.name}">
+              <h2>${product.name}</h2>
+              <h3>$${parseFloat(product.price).toFixed(2)}</h3>
+              <button class="btn btn-primary buy-now">Buy Now</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Initial fetch if configuration is set
+      if (CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE') {
+        try {
+          // Clear current static content while loading
+          productGrid.innerHTML = '<div class="col-12 text-center text-white"><p>Loading products...</p></div>';
+
+          const products = await API.getProductsByCategory('figurine');
+          renderProducts(products);
+        } catch (error) {
+          console.error("Failed to load products:", error);
+          // Keep static content if database fails or show error
+        }
+      }
+
+      // Handle "Buy Now" buttons (even for dynamic content)
+      document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('buy-now')) {
+          alert("Your order is processing.");
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

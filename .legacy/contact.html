@@ -1,0 +1,372 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AniVerse Collectibles</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar {
+      background-color: #4c3297;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .navbar .navbar-brand img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .navbar .nav-link {
+      color: #ff6f61;
+      font-family: "Inter-Black", sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+      margin-left: 20px;
+    }
+
+    .navbar .nav-link:hover {
+      color: #ffffff;
+    }
+
+    .navbar .nav-link.active {
+      color: #ffffff;
+    }
+
+    .navbar .nav-link.active:hover {
+      color: #ff6f61;
+    }
+
+    .navbar-toggler {
+      border-color: #ff6f61;
+    }
+
+    .navbar-toggler:hover {
+      box-shadow: none;
+    }
+
+    .navbar-toggler-icon {
+      color: #ff6f61;
+      font-size: 1.5rem;
+      font-family: "Inter-Black", sans-serif;
+    }
+
+    .btn-secondary {
+      background-color: #4c3297;
+      color: #ffffff;
+      border: none;
+      font-size: 1.1rem;
+      padding: 10px 20px;
+      font-family: "Inter-Black", sans-serif;
+      box-shadow: 0 0 5px 2px rgba(255, 111, 97, 0.8);
+      /* Shadow for non-responsive */
+    }
+
+    .btn-secondary:hover {
+      background-color: #ff6f61;
+    }
+
+    .ellipse-1 {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .footer {
+      background-color: #4c3297;
+      color: #ffffff;
+      padding: 30px 0;
+      margin-top: 50px;
+    }
+
+    .footer a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer .social-icons img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    .form-control {
+      font-size: 1.1rem;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 767px) {
+      .navbar .navbar-brand img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .navbar .nav-link {
+        font-size: 1rem;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+
+      .btn-secondary {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        box-shadow: none;
+        /* Remove shadow for responsive */
+      }
+
+      .form-control {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+    }
+
+    .contact-us {
+      color: #000;
+      font-family: "Inter-SemiBold", sans-serif;
+      font-size: 64px;
+      font-weight: 600;
+    }
+
+    .feel-free-to-send-message {
+      color: #000;
+      font-family: "Inter-SemiBold", sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+
+    .btn-submit {
+      height: 64px;
+      width: 204px;
+      background-color: #d9d9d9;
+      border-radius: 0px;
+      font-family: "Inter-Black", sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: #4c3297;
+      border: none;
+      margin-top: 30px;
+    }
+
+    .btn-submit:hover {
+      background-color: #4c3297;
+      color: #ffffff;
+    }
+
+    .nav-link {
+      color: #ff6f61;
+      font-family: "Inter-Black", sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      margin: 0;
+      /* Remove margin */
+      padding: 15px 20px;
+      /* Adjust padding as needed */
+    }
+
+    .nav-link:hover {
+      color: #ffffff;
+    }
+
+    .form-container {
+      background-color: #f0f0f0;
+      padding: 30px;
+      border-radius: 8px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .contact-us {
+        font-size: 48px;
+      }
+
+      .feel-free-to-send-message {
+        font-size: 20px;
+      }
+
+      .rectangle-1 {
+        height: 140px;
+        padding: 0 20px;
+        flex-direction: column;
+      }
+
+      .ellipse-1 {
+        margin: 0 auto;
+      }
+
+      .nav-link {
+        font-size: 18px;
+        padding: 10px 15px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .rectangle-1 {
+        height: 120px;
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      .contact-us {
+        font-size: 36px;
+      }
+
+      .feel-free-to-send-message {
+        font-size: 18px;
+      }
+
+      .nav-link {
+        font-size: 16px;
+        padding: 8px 10px;
+      }
+
+      .ellipse-1 {
+        width: 100px;
+        height: 100px;
+        margin: 10px auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="shop.html">
+        <img class="ellipse-1" src="image/logo.png" alt="Logo" />
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarColor01">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="shop.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="products.html">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+      <div class="contact-us">Contact Us</div>
+      <div class="feel-free-to-send-message mt-3">
+        Feel free to send a message if you have any questions. Our team will do its best to answer your questions.
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="form-container">
+        <form action="https://formspree.io/f/xdkngeyo" method="POST">
+          <div class="form-group row">
+            <div class="col">
+              <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+            </div>
+            <div class="col">
+              <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <textarea name="message" class="form-control" rows="5" placeholder="Message" required></textarea>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Footer -->
+  <div class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <p>Email: <a href="mailto:support@animefigshaven.com">support@animefigshaven.com</a></p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <a href="index.html">Home</a><br>
+          <a href="shop.html">Products</a><br>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="col-md-4">
+          <h5>Follow Us</h5>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/profile.php?id=61563752905603"><img src="image/facebook.jfif"
+                alt="Facebook"></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <p>&copy; 2024 AnimeFigs Haven. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const contactForm = document.querySelector('form');
+
+      if (CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_URL_HERE') {
+        // Change form action to prevent default formspree submission if Supabase is configured
+        contactForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          const originalBtnText = submitBtn.textContent;
+          submitBtn.textContent = 'Submitting...';
+          submitBtn.disabled = true;
+
+          const formData = {
+            first_name: contactForm.first_name.value,
+            last_name: contactForm.last_name.value,
+            email: contactForm.email.value,
+            message: contactForm.message.value
+          };
+
+          try {
+            await API.submitContactForm(formData);
+            alert('Your message has been sent successfully!');
+            contactForm.reset();
+          } catch (error) {
+            console.error('Submission error:', error);
+            alert('Failed to send message. Please try again later.');
+          } finally {
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
