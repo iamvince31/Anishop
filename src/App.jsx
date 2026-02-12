@@ -5,6 +5,11 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import CategoryPage from './pages/CategoryPage';
 import Contact from './pages/Contact';
+import AddCategory from './pages/AddCategory';
+import AddProduct from './pages/AddProduct';
+import Login from './pages/Login';
+import AdminPanel from './pages/AdminPanel';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -17,6 +22,47 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminPanel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-category"
+              element={
+                <ProtectedRoute>
+                  <AddCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-product"
+              element={
+                <ProtectedRoute>
+                  <AddProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-category/:id"
+              element={
+                <ProtectedRoute>
+                  <AddCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-product/:id"
+              element={
+                <ProtectedRoute>
+                  <AddProduct />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <Footer />

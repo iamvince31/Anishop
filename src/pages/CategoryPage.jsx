@@ -45,21 +45,35 @@ const CategoryPage = () => {
           No products found in this category.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {products.map(product => (
-            <div key={product.id} className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group border border-gray-100">
-              <div className="bg-gray-50 rounded-xl p-4 mb-4 h-64 flex items-center justify-center overflow-hidden">
-                <img
-                  src={`/.legacy/${product.image_url}`}
-                  alt={product.name}
-                  className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
-                />
+            <div key={product.id} className="bg-white rounded-[2.5rem] p-3 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group border border-gray-100">
+              {/* Inner Frame */}
+              <div className="bg-white rounded-[2rem] border border-gray-50 p-1 overflow-hidden">
+                <div className="aspect-square w-full rounded-[1.8rem] overflow-hidden flex items-center justify-center bg-gray-50/50 relative">
+                  <img
+                    src={product.image_url?.startsWith('http') ? product.image_url : `/.legacy/${product.image_url}`}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  {/* Floating Price Badge */}
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg font-black text-accent text-sm">
+                    ${parseFloat(product.price).toFixed(2)}
+                  </div>
+                </div>
               </div>
-              <div className="px-2">
-                <h2 className="font-display font-bold text-gray-800 text-lg mb-1 truncate" title={product.name}>{product.name}</h2>
-                <h3 className="text-accent font-black text-xl mb-4">${parseFloat(product.price).toFixed(2)}</h3>
+
+              {/* Info Section */}
+              <div className="px-4 py-5 space-y-3">
+                <div>
+                  <h2 className="font-display font-bold text-gray-800 text-lg leading-tight truncate px-1" title={product.name}>
+                    {product.name}
+                  </h2>
+                  <p className="text-xs text-gray-400 font-medium px-1 mt-1">Premium Collection</p>
+                </div>
+
                 <button
-                  className="w-full py-3 bg-gradient-to-r from-accent to-[#ff8a7f] text-white font-bold rounded-lg shadow-lg shadow-accent/20 hover:shadow-accent/40 active:scale-95 transition-all"
+                  className="w-full py-3.5 bg-gray-900 hover:bg-black text-white font-bold rounded-2xl shadow-xl hover:shadow-gray-200 active:scale-95 transition-all text-sm uppercase tracking-wider"
                   onClick={handleBuyNow}
                 >
                   Buy Now

@@ -1,9 +1,30 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
+
   const isActive = (path) => location.pathname === path ? 'text-white' : 'text-white/90 hover:text-white';
 
   return (
@@ -37,6 +58,16 @@ const Navbar = () => {
             <Link to="/" className={`font-bold text-lg transition-all ${isActive('/')}`}>Home</Link>
             <Link to="/products" className={`font-bold text-lg transition-all ${isActive('/products')} text-[#ff6f61]`}>Products</Link>
             <Link to="/contact" className={`font-bold text-lg transition-all ${isActive('/contact')} text-[#ff6f61]`}>Contact</Link>
+
+            {session ? (
+              <>
+                <div className="h-6 w-px bg-white/20 ml-2"></div>
+                <Link to="/admin" className={`font-bold text-sm bg-accent border border-accent rounded-xl px-5 py-2 hover:bg-accent/90 transition-all ${isActive('/admin')}`}>Admin Dashboard</Link>
+                <button onClick={handleLogout} className="font-bold text-sm text-white/50 hover:text-white transition-all">Logout</button>
+              </>
+            ) : (
+              <Link to="/login" className="font-bold text-sm text-white/30 hover:text-white transition-all">Admin Access</Link>
+            )}
           </div>
         </div>
 
@@ -46,6 +77,18 @@ const Navbar = () => {
             <Link to="/" className={`block px-4 py-3 rounded-lg font-semibold text-sm ${isActive('/')}`} onClick={() => setMenuOpen(false)}>Home</Link>
             <Link to="/products" className={`block px-4 py-3 rounded-lg font-semibold text-sm ${isActive('/products')}`} onClick={() => setMenuOpen(false)}>Products</Link>
             <Link to="/contact" className={`block px-4 py-3 rounded-lg font-semibold text-sm ${isActive('/contact')}`} onClick={() => setMenuOpen(false)}>Contact</Link>
+
+            {session ? (
+              <>
+                <hr className="border-white/10 my-1" />
+                <Link to="/admin" className={`block px-4 py-3 rounded-lg font-bold text-sm bg-accent text-white ${isActive('/admin')}`} onClick={() => setMenuOpen(false)}>Admin Panel</Link>
+                <Link to="/add-category" className={`block px-4 py-3 rounded-lg font-semibold text-sm ${isActive('/add-category')}`} onClick={() => setMenuOpen(false)}>Add Category</Link>
+                <Link to="/add-product" className={`block px-4 py-3 rounded-lg font-semibold text-sm ${isActive('/add-product')}`} onClick={() => setMenuOpen(false)}>Add Product</Link>
+                <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="text-left px-4 py-3 font-semibold text-sm text-white/50">Logout</button>
+              </>
+            ) : (
+              <Link to="/login" className="block px-4 py-3 rounded-lg font-semibold text-sm text-white/50" onClick={() => setMenuOpen(false)}>Admin Login</Link>
+            )}
           </div>
         </div>
       </div>
