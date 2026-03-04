@@ -2,20 +2,37 @@ import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredRole }) => {
   const [session, setSession] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
-      setLoading(false);
-    });
 
-    // Listen for changes
+      if (session) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+
+        setRole(profile?.role || 'customer');
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (!session) {
+        setRole(null);
+      } else {
+        checkAuth();
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -31,6 +48,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (!session) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && role !== requiredRole) {
+    return <Navigate to="/" replace />; // Redirect unauthorized users to Home
   }
 
   return children;

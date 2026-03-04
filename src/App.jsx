@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import AddCategory from './pages/AddCategory';
 import AddProduct from './pages/AddProduct';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminPanel from './pages/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -23,10 +24,11 @@ function App() {
             <Route path="/category/:categoryName" element={<CategoryPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route
               path="/admin"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="admin">
                   <AdminPanel />
                 </ProtectedRoute>
               }
@@ -34,7 +36,7 @@ function App() {
             <Route
               path="/add-category"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="admin">
                   <AddCategory />
                 </ProtectedRoute>
               }
@@ -42,7 +44,7 @@ function App() {
             <Route
               path="/add-product"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="admin">
                   <AddProduct />
                 </ProtectedRoute>
               }
@@ -50,7 +52,7 @@ function App() {
             <Route
               path="/edit-category/:id"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="admin">
                   <AddCategory />
                 </ProtectedRoute>
               }
@@ -58,7 +60,7 @@ function App() {
             <Route
               path="/edit-product/:id"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="admin">
                   <AddProduct />
                 </ProtectedRoute>
               }
