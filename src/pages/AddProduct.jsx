@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/localStorage';
 
 const AddProduct = () => {
   const { id } = useParams();
@@ -9,8 +9,7 @@ const AddProduct = () => {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
-  const [existingImageUrl, setExistingImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -18,20 +17,20 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       // Fetch Categories
-      const { data: catData, error: catError } = await supabase.from('categories').select('*');
+      const { data: catData, error: catError } = await db.getCategories();
       if (!catError && catData) {
         setCategories(catData);
       }
 
       // If editing, fetch Product
       if (id) {
-        const { data: prodData, error: prodError } = await supabase.from('products').select('*').eq('id', id).single();
+        const { data: prodData, error: prodError } = await db.getProductById(id);
         if (!prodError && prodData) {
           setName(prodData.name);
           setPrice(prodData.price);
           setCategory(prodData.category);
           setDescription(prodData.description || '');
-          setExistingImageUrl(prodData.image_url);
+          setImageUrl(prodData.image_url);
         }
       }
     };
@@ -50,149 +49,150 @@ const AddProduct = () => {
     }
 
     try {
-      let imageUrl = null;
-
-      // Handle Image Upload
-      if (image) {
-        const fileExt = image.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `products/${fileName}`; // Organized in a subfolder
-
-        const { error: uploadError } = await supabase.storage
-          .from('images') // Reusing the same 'images' bucket
-          .upload(filePath, image);
-
-        if (uploadError) throw new Error(`Image Upload Failed: ${uploadError.message}`);
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('images')
-          .getPublicUrl(filePath);
-
-        imageUrl = publicUrl;
-      }
-
-      // Prepare Payload
       const payload = {
         name,
         price: parseFloat(price),
         category: category,
         description,
-        image_url: imageUrl || existingImageUrl
+        image_url: imageUrl
       };
 
-      const query = id
-        ? supabase.from('products').update(payload).eq('id', id)
-        : supabase.from('products').insert([payload]);
+      const { error } = id
+        ? await db.updateProduct(id, payload)
+        : await db.addProduct(payload);
 
-      const { error: dbError } = await query;
-
-      if (dbError) throw new Error(`Product Save Failed: ${dbError.message}`);
+      if (error) throw error;
 
       setMessage({ type: 'success', text: id ? 'Product updated successfully!' : 'Product added successfully!' });
 
       if (!id) {
         setName('');
         setPrice('');
+        setCategory('');
         setDescription('');
-        setImage(null);
-      } else {
-        setTimeout(() => navigate('/admin'), 1500);
+        setImageUrl('');
       }
-    } catch (error) {
-      setMessage({ type: 'error', text: error.message });
+
+      setTimeout(() => navigate('/admin'), 1500);
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-16">
-      <h1 className="text-3xl md:text-4xl font-display font-bold mb-8 text-center text-primary">
-        {id ? 'Edit Product' : 'Add New Product'}
-      </h1>
-      <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        {message && (
-          <div className={`p-4 mb-6 rounded-lg text-sm font-medium ${message.type === 'success' ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
-            {message.text}
+    <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="mb-8">
+        <h1 className="text-3xl font-display font-bold text-gray-900 italic">
+          {id ? 'Edit Product' : 'Add New Product'}
+        </h1>
+        <p className="text-gray-500 mt-1">Manage your product inventory</p>
+      </div>
+
+      {message && (
+        <div className={`p-4 mb-6 rounded-xl text-sm font-medium border ${
+          message.type === 'success' 
+            ? 'bg-green-50 text-green-700 border-green-100' 
+            : 'bg-red-50 text-red-700 border-red-100'
+        }`}>
+          {message.text}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+        <div>
+          <label className="block text-sm font-bold text-gray-700 mb-2">Product Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
+            placeholder="e.g., Gojo Satoru Figure"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Price</label>
+            <input
+              type="number"
+              step="0.01"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
+              placeholder="99.99"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-accent focus:border-transparent outline-none bg-white"
+            >
+              <option value="">Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.slug}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows="4"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-accent focus:border-transparent outline-none resize-y"
+            placeholder="Product description..."
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-gray-700 mb-2">Image URL</label>
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            required
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
+            placeholder="https://example.com/image.jpg or /.legacy/image/pic.png"
+          />
+          <p className="text-xs text-gray-500 mt-1">Enter a full URL or path to an image</p>
+        </div>
+
+        {imageUrl && (
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Preview</label>
+            <img src={imageUrl} alt="Preview" className="w-48 h-48 object-cover rounded-xl border border-gray-200" />
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Product Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none"
-              placeholder="e.g., Demon Slayer Figure"
-            />
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Price ($)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none"
-                placeholder="29.99"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none bg-white"
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.slug}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows="3"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none resize-none"
-              placeholder="Product description... (optional)"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">
-              Product Image {id && <span className="text-xs font-normal text-gray-400 ml-2">(Leave empty to keep current)</span>}
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              required={!id}
-              onChange={(e) => setImage(e.target.files[0])}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20"
-            />
-          </div>
-
+        <div className="flex gap-4 pt-4">
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-accent hover:bg-accent/90 text-white font-bold py-3.5 px-6 rounded-lg shadow-lg shadow-accent/20 hover:shadow-accent/40 active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex-1 bg-accent text-white font-bold py-3 px-6 rounded-xl hover:bg-accent/90 transition-all disabled:opacity-70"
           >
-            {loading ? (id ? 'Updating...' : 'Adding...') : (id ? 'Update Product' : 'Add Product')}
+            {loading ? 'Saving...' : (id ? 'Update Product' : 'Add Product')}
           </button>
-        </form>
-      </div>
+          <button
+            type="button"
+            onClick={() => navigate('/admin')}
+            className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

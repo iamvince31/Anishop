@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/localStorage';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
@@ -17,8 +17,8 @@ const AdminPanel = () => {
     setLoading(true);
     try {
       const [catRes, prodRes] = await Promise.all([
-        supabase.from('categories').select('*').order('name'),
-        supabase.from('products').select('*').order('created_at', { ascending: false })
+        db.getCategories(),
+        db.getProducts()
       ]);
 
       if (catRes.error) throw catRes.error;
@@ -38,7 +38,7 @@ const AdminPanel = () => {
     if (!window.confirm('Are you sure? This will not delete the products in this category but may break links.')) return;
 
     try {
-      const { error } = await supabase.from('categories').delete().eq('id', id);
+      const { error } = await db.deleteCategory(id);
       if (error) throw error;
       setCategories(categories.filter(c => c.id !== id));
       setMessage({ type: 'success', text: 'Category deleted.' });
@@ -51,7 +51,7 @@ const AdminPanel = () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      const { error } = await supabase.from('products').delete().eq('id', id);
+      const { error } = await db.deleteProduct(id);
       if (error) throw error;
       setProducts(products.filter(p => p.id !== id));
       setMessage({ type: 'success', text: 'Product deleted.' });

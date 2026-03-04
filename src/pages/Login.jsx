@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { auth, db } from '../lib/localStorage';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const { data: { session }, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await auth.signIn({
         email,
         password,
       });
@@ -23,13 +23,9 @@ const Login = () => {
       if (error) throw error;
 
       // Check role to decide where to navigate
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-
-      if (profile?.role === 'admin') {
+      const user = data.session.user;
+      
+      if (user.role === 'admin') {
         navigate('/admin');
       } else {
         navigate('/products');

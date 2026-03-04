@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/localStorage';
 
 const Products = () => {
   const [categories, setCategories] = useState([]);
@@ -12,9 +12,7 @@ const Products = () => {
 
   const fetchCategories = async () => {
     try {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*');
+      const { data, error } = await db.getCategories();
 
       if (error) throw error;
       setCategories(data || []);

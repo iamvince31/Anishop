@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { auth } from '../lib/localStorage';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const [session, setSession] = useState(null);
@@ -9,24 +9,18 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await auth.getSession();
       setSession(session);
 
       if (session) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
-        setRole(profile?.role || 'customer');
+        setRole(session.user.role || 'user');
       }
       setLoading(false);
     };
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (!session) {
         setRole(null);

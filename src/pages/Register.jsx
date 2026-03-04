@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { auth } from '../lib/localStorage';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -16,24 +16,18 @@ const Register = () => {
     setError(null);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            username: username
-          }
-        }
+        username
       });
 
       if (error) throw error;
 
-      // The profile will be created by the database trigger with default role 'user'
-
       if (data.session) {
         navigate('/');
       } else {
-        alert('Registration successful! Please check your email for verification.');
+        alert('Registration successful!');
         navigate('/login');
       }
     } catch (err) {

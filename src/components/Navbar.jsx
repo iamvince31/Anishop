@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { auth, db } from '../lib/localStorage';
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,23 +19,16 @@ const Navbar = () => {
         return;
       }
       setSession(session);
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role, username')
-        .eq('id', session.user.id)
-        .single();
-      if (!error && profile) {
-        setRole(profile.role || 'customer');
-        setUsername(profile.username);
-      }
+      setRole(session.user.role || 'user');
+      setUsername(session.user.username);
     };
 
     // Initial check
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    auth.getSession().then(({ data: { session } }) => {
       fetchProfile(session);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = auth.onAuthStateChange((_event, session) => {
       fetchProfile(session);
     });
 
@@ -43,7 +36,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await auth.signOut();
     navigate('/');
   };
 

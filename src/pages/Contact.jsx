@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/localStorage';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,9 +14,7 @@ const Contact = () => {
     e.preventDefault();
     setSubmitting(true);
 
-    const { error } = await supabase
-      .from('contact_submissions')
-      .insert([formData]);
+    const { error } = await db.addContact(formData);
 
     if (error) {
       alert("Failed to send message. Please try again.");

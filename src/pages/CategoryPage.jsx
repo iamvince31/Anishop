@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { db } from '../lib/localStorage';
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
@@ -13,10 +13,7 @@ const CategoryPage = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('category', categoryName);
+    const { data, error } = await db.getProductsByCategory(categoryName);
 
     if (!error) setProducts(data);
     setLoading(false);
